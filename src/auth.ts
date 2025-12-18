@@ -20,7 +20,6 @@ export const verifyToken = (token: string): TokenPayload | null => {
         return jwt.verify(token, SUPER_SECRETO) as TokenPayload;
     } catch (err) {
         return null;
-
     }
 };
 

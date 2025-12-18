@@ -9,7 +9,6 @@ export type OwnedPokemon = {
     level: number
 };
 
-
 export type PokemonUser = {
     _id: string
     name: string
