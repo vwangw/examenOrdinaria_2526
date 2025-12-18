@@ -83,10 +83,7 @@ export const catchPokemon = async (
     { $addToSet: { pokemons: ownedPokemon } }
   );
 
-  
-  const updatedUser = await db
-    .collection(COLLECTION_USERS)
-    .findOne({ _id: localUserId });
+  const updatedUser = await db.collection(COLLECTION_USERS).findOne({ _id: localUserId });
 
   return updatedUser?.pokemons.find(
     (p: any) => p._id === ownedPokemon._id
@@ -97,25 +94,20 @@ export const catchPokemon = async (
 export const freePokemon = async (ownedPokemonId: string, userId: string): Promise<{ _id: string; name: string; pokemons: OwnedPokemon[] }> => {
   const db = getDB();
   const localUserId = new ObjectId(userId);
-
   
   const user = await db.collection(COLLECTION_USERS).findOne({ _id: localUserId });
   if (!user) throw new Error("User not found");
 
-  
   const pokemonIndex = user.pokemons.findIndex((p: any) => p._id === ownedPokemonId);
   if (pokemonIndex === -1) throw new Error("Owned Pokemon not found");
-  //hola
-  
+
   user.pokemons.splice(pokemonIndex, 1);
 
-  
   await db.collection(COLLECTION_USERS).updateOne(
     { _id: localUserId },
     { $set: { pokemons: user.pokemons } }
   );
 
-  
   return {
     _id: user._id.toString(),
     name: user.name || "Trainer",
